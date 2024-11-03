@@ -1,0 +1,85 @@
+Index: src/main/resources/db/migration/V1__.sql
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/db/migration/V1__.sql b/src/main/resources/db/migration/V1__.sql
+new file mode 100644
+--- /dev/null	(date 1730417449469)
++++ b/src/main/resources/db/migration/V1__.sql	(date 1730417449469)
+@@ -0,0 +1,75 @@
++-- Criação da tabela Tutor
++CREATE TABLE Tutor (
++    id INT PRIMARY KEY AUTO_INCREMENT,
++    nome VARCHAR(100) NOT NULL,
++    email VARCHAR(100) NOT NULL UNIQUE,
++    telefone VARCHAR(15)
++);
++
++-- Criação da tabela Pet
++CREATE TABLE Pet (
++    id INT PRIMARY KEY AUTO_INCREMENT,
++    nome VARCHAR(100) NOT NULL,
++    especie VARCHAR(50) NOT NULL,
++    idade INT,
++    tutor_id INT,
++    FOREIGN KEY (tutor_id) REFERENCES Tutor(id)
++);
++
++-- Criação da tabela Prestador
++CREATE TABLE Prestador (
++    id INT PRIMARY KEY AUTO_INCREMENT,
++    nome VARCHAR(100) NOT NULL,
++    especialidade VARCHAR(100)
++);
++
++-- Criação da tabela Serviço
++CREATE TABLE Servico (
++    id INT PRIMARY KEY AUTO_INCREMENT,
++    descricao VARCHAR(255) NOT NULL,
++    preco DECIMAL(10, 2) NOT NULL,
++    prestador_id INT,
++    FOREIGN KEY (prestador_id) REFERENCES Prestador(id)
++);
++
++-- Inserção de dados na tabela Tutor
++INSERT INTO Tutor (nome, email, telefone) VALUES
++('Ana Souza', 'ana.souza@example.com', '123456789'),
++('Pedro Lima', 'pedro.lima@example.com', '987654321');
++
++-- Inserção de dados na tabela Pet
++INSERT INTO Pet (nome, especie, idade, tutor_id) VALUES
++('Rex', 'Cachorro', 5, 1),
++('Mimi', 'Gato', 3, 2);
++
++-- Inserção de dados na tabela Prestador
++INSERT INTO Prestador (nome, especialidade) VALUES
++('Carlos Veterinário', 'Veterinário'),
++('Lucia Pet Sitter', 'Cuidados com Animais');
++
++-- Inserção de dados na tabela Serviço
++INSERT INTO Servico (descricao, preco, prestador_id) VALUES
++('Consulta Veterinária', 150.00, 1),
++('Passeio com o Pet', 50.00, 2);
++
++-- Consulta para selecionar todos os Tutores
++SELECT * FROM Tutor;
++
++-- Consulta para selecionar todos os Pets
++SELECT * FROM Pet;
++
++-- Consulta para selecionar todos os Prestadores
++SELECT * FROM Prestador;
++
++-- Consulta para selecionar todos os Serviços
++SELECT * FROM Servico;
++
++-- Consulta para relacionar Pets com seus Tutores
++SELECT p.nome AS pet_nome, t.nome AS tutor_nome
++FROM Pet p
++JOIN Tutor t ON p.tutor_id = t.id;
++
++-- Consulta para listar Serviços oferecidos por cada Prestador
++SELECT s.descricao, s.preco, p.nome AS prestador_nome
++FROM Servico s
++JOIN Prestador p ON s.prestador_id = p.id;
